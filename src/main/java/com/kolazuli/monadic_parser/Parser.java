@@ -393,6 +393,38 @@ public class Parser {
     }
 
     /**
+     * Creates a parser that matches a string exactly as a key in the provided map.
+     *
+     * <p>This method takes a map where keys are operator strings and values are their corresponding
+     * objects of type T. It returns a parser that, when called with an input string,
+     * attempts to match the input string exactly with each key in the map. If a match is found,
+     * the parser returns a pair with the corresponding value from the map and the remaining
+     * string after the match. If no match is found, the parser returns a pair with
+     * {@code null} as the first element and the original input string as the second element.
+     *
+     * @param <T> the type of the values in the map
+     * @param map the map containing the keys to match and their corresponding values
+     * @return a new parser that matches a string exactly as a key in the provided map
+     * @throws IllegalArgumentException if the map is null or empty
+     */
+    public static <T> MonadicParser<T> mapParser(Map<String, T> map) {
+        if(map == null || map.isEmpty()) {
+            throw new IllegalArgumentException("Please provide the operator map.");
+        }
+        return input -> {
+            for (Map.Entry<String, T> entry : map.entrySet()) {
+                String operator = entry.getKey();
+                MonadicParser<CharSequence> parser = textExactParser(operator);
+                Pair<CharSequence, String> result = parser.parse(input);
+                if (result.getFirst() != null) {
+                    return Pair.of(entry.getValue(), result.getSecond());
+                }
+            }
+            return Pair.of(null, input);
+        };
+    }
+
+    /**
      * Applies a parser to the input string and calls the on_success function if the
      * parse succeeds,
      * or the on_failure function if the parse fails.

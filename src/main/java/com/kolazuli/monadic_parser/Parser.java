@@ -416,9 +416,9 @@ public class Parser {
                     .remaining(result.getSecond())
                     .state(sharedState)
                     .build();
-            if (result.getFirst() != null) {
+            if (onSuccess != null && result.getFirst() != null) {
                 onSuccess.apply(rule);
-            } else {
+            } else if(onFailure != null) {
                 onFailure.apply(rule);
             }
             return result;

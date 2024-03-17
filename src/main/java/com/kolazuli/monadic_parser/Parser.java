@@ -376,6 +376,9 @@ public class Parser {
      * @return A parser that matches operators based on their precedence.
      */
     public static MonadicParser<Integer> operatorPrecedenceParser(Map<String, Integer> operatorMap) {
+        if(operatorMap == null || operatorMap.isEmpty()) {
+            throw new IllegalArgumentException("Please provide the operator map.");
+        }
         return input -> {
             for (Map.Entry<String, Integer> entry : operatorMap.entrySet()) {
                 String operator = entry.getKey();

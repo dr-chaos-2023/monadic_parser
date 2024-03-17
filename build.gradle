@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+group 'com.kolazuli'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    // Add your dependencies here
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+}
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.kolazuli.monadic_parser.Main'
+    }
+}

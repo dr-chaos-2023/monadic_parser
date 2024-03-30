@@ -2,6 +2,7 @@ package com.kolazuli.monadic_parser;
 
 import java.util.Map;
 import java.util.List;
+import java.util.Optional;
 import java.util.ArrayList;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -376,20 +377,7 @@ public class Parser {
      * @return A parser that matches operators based on their precedence.
      */
     public static MonadicParser<Integer> operatorPrecedenceParser(Map<String, Integer> operatorMap) {
-        if(operatorMap == null || operatorMap.isEmpty()) {
-            throw new IllegalArgumentException("Please provide the operator map.");
-        }
-        return input -> {
-            for (Map.Entry<String, Integer> entry : operatorMap.entrySet()) {
-                String operator = entry.getKey();
-                MonadicParser<CharSequence> parser = textExactParser(operator);
-                Pair<CharSequence, String> result = parser.parse(input);
-                if (result.getFirst() != null) {
-                    return Pair.of(entry.getValue(), result.getSecond());
-                }
-            }
-            return Pair.of(null, input);
-        };
+        return mapParser(operatorMap);
     }
 
     /**
@@ -412,13 +400,10 @@ public class Parser {
             throw new IllegalArgumentException("Please provide the operator map.");
         }
         return input -> {
-            for (Map.Entry<String, T> entry : map.entrySet()) {
-                String operator = entry.getKey();
-                MonadicParser<CharSequence> parser = textExactParser(operator);
-                Pair<CharSequence, String> result = parser.parse(input);
-                if (result.getFirst() != null) {
-                    return Pair.of(entry.getValue(), result.getSecond());
-                }
+            T value = map.getOrDefault(input, null);
+            if (value != null) {
+                Pair<CharSequence, String> pair = Parser.textExactParser(input).parse(input);
+                return Pair.of(value, pair.getSecond());
             }
             return Pair.of(null, input);
         };

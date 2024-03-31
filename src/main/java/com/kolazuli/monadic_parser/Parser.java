@@ -460,8 +460,17 @@ public class Parser {
             if (input.isEmpty()) {
                 return Pair.of(null, input);
             }
+            synchronized (lock) {
+                scanner.setLine(0);
+                scanner.setLast('\0');
+                scanner.setColumn(0);
+                scanner.setPosition(0);
+            }
             Pair<T, String> pair = parser.parse(input);
             int position = input.length() - pair.getSecond().length();
+            if (position <= 0) {
+                return pair;
+            }
             char last = input.charAt(position - 1);
             int line = 0;
             int column = 0;

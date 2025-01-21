@@ -1,10 +1,10 @@
-# monadic_parser
+# Monadic Parser
 
-## Description
+With this library, you can construct parsers for domain-specific languages (DSLs), interpreters, or any structured data format using simple, reusable components.
 
-This is a Java project named monadic_parser.
+**Features**
 
-## Building
-
-To build this project, use the following command:
-
+*Monadic Composition:* Combine parsers using functional chaining (flatMap, map, etc.).
+*Error Handling:* Built-in support for error propagation and recovery.
+*Reusable Components:* Construct complex parsers from simple building blocks.
+*Functional Programming Style:* Encourages an expressive and declarative approach to parser design.
